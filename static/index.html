@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input[type="email"] {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Authentication Test</h2>
+        
+        <!-- Login Form -->
+        <div id="loginForm">
+            <h3>Login with Magic Link</h3>
+            <input type="email" id="email" placeholder="Enter your email">
+            <button onclick="requestMagicLink()">Send Magic Link</button>
+        </div>
+
+        <!-- Results Display -->
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'http://3.131.82.143:8080'; // Replace with your EC2 public IP
+
+        // Check if we're on the verification page
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const preAuthSessionId = urlParams.get('preAuthSessionId');
+            const linkCode = window.location.hash.substring(1);
+            
+            if (preAuthSessionId && linkCode) {
+                verifyMagicLink(preAuthSessionId, linkCode);
+            }
+        };
+
+        async function requestMagicLink() {
+            const email = document.getElementById('email').value;
+            const result = document.getElementById('result');
+            
+            try {
+                const response = await axios.post(`${API_URL}/auth/login`, { email });
+                result.className = 'success';
+                result.innerHTML = `Magic link created!<br><a href="${response.data.link}">Click here to verify</a>`;
+            } catch (error) {
+                result.className = 'error';
+                result.innerHTML = `Error: ${error.response?.data || error.message}`;
+            }
+        }
+
+        async function verifyMagicLink(preAuthSessionId, linkCode) {
+            const result = document.getElementById('result');
+            try {
+                const response = await axios.get(`${API_URL}/auth/verify?preAuthSessionId=${preAuthSessionId}&linkCode=${linkCode}`);
+                result.className = 'success';
+                result.innerHTML = `Successfully logged in!<br>User ID: ${response.data.userId}`;
+            } catch (error) {
+                result.className = 'error';
+                result.innerHTML = `Error: ${error.response?.data || error.message}`;
+            }
+        }
+    </script>
+</body>
+</html>

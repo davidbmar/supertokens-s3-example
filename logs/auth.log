@@ -1,0 +1,152 @@
+2024/12/02 05:29:49 main.go:20: Starting server on port 8080
+2024/12/02 05:29:51 handlers.go:88: Magic Link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=3-c_ohWeNu4PHTDD2fn4MEAMCvc_Dn70OKnSFj_lE_o&tenantId=public#KLL8FSiKlJyWHfWGKxjUjIWUPXxL595I-RzO_jXK0X0
+2024/12/02 05:34:59 main.go:20: Starting server on port 8080
+2024/12/02 05:39:45 handlers.go:38: Initializing SuperTokens...
+2024/12/02 05:39:45 handlers.go:63: SuperTokens initialized successfully
+2024/12/02 05:39:45 main.go:20: Starting server on port 8080
+2024/12/02 05:46:54 handlers.go:33: Starting SuperTokens initialization...
+2024/12/02 05:46:54 handlers.go:65: SuperTokens initialized successfully
+2024/12/02 05:46:54 main.go:20: Starting server on port 8080
+2024/12/02 05:48:31 handlers.go:93: Incoming request: GET / from [::1]:34262
+2024/12/02 05:48:31 handlers.go:95: Completed request: GET /
+2024/12/02 05:49:59 handlers.go:93: Incoming request: POST /auth/login from [::1]:53604
+2024/12/02 05:49:59 handlers.go:112: Handling login request from [::1]:53604
+2024/12/02 05:49:59 handlers.go:123: Received login request for email: test@example.com
+2024/12/02 05:49:59 handlers.go:137: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=YMwkzqD6WolSkkPseHODTNnRKGyBDuUmu_O95vfP6nQ&tenantId=public#VcnUBMiT6FMbnYAzHrvW1V7k2e_ZWo5mThET2yppsPs
+2024/12/02 05:49:59 handlers.go:95: Completed request: POST /auth/login
+2024/12/02 05:51:56 handlers.go:93: Incoming request: POST /auth/login from 136.62.92.204:54998
+2024/12/02 05:51:56 handlers.go:112: Handling login request from 136.62.92.204:54998
+2024/12/02 05:51:56 handlers.go:123: Received login request for email: test@example.com
+2024/12/02 05:51:56 handlers.go:137: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=bLsOu6S42kNeGz7dKqRMrlsjowUH2Z6AYpOyzOqNHbo&tenantId=public#B2hRDd6FohSIY4bB_iWQXk7u7uO8nedivqPK1f8Qdgs
+2024/12/02 05:51:56 handlers.go:95: Completed request: POST /auth/login
+2024/12/03 04:44:56 handlers.go:33: Starting SuperTokens initialization...
+2024/12/03 04:44:56 handlers.go:64: SuperTokens initialized successfully
+2024/12/03 04:44:56 main.go:20: Starting server on port 8080
+2024/12/03 04:45:42 handlers.go:93: Incoming request: POST /auth/login from 136.62.92.204:62331
+2024/12/03 04:45:42 handlers.go:112: Handling login request from 136.62.92.204:62331
+2024/12/03 04:45:42 handlers.go:123: Received login request for email: test@example.com
+2024/12/03 04:45:42 handlers.go:137: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=wLeC7pFplY8ImaK6zXxkXDnHq5AIZbVL2wxSP9OO_GU&tenantId=public#XKDSTrZ8NCxEsETBqKPSycwgEDm5WWtWRJ6nXTd3FXI
+2024/12/03 04:45:42 handlers.go:95: Completed request: POST /auth/login
+2024/12/03 04:46:45 handlers.go:93: Incoming request: GET /auth/verify from 136.62.92.204:62353
+2024/12/03 04:46:45 handlers.go:95: Completed request: GET /auth/verify
+2024/12/03 04:46:55 handlers.go:93: Incoming request: GET /auth/verify from 136.62.92.204:62353
+2024/12/03 04:46:55 handlers.go:95: Completed request: GET /auth/verify
+2024/12/03 04:51:28 handlers.go:33: Starting SuperTokens initialization...
+2024/12/03 04:51:28 handlers.go:64: SuperTokens initialized successfully
+2024/12/03 04:51:28 main.go:20: Starting server on port 8080
+2024/12/03 04:53:29 handlers.go:93: Incoming request: POST /auth/login from 136.62.92.204:63455
+2024/12/03 04:53:29 handlers.go:112: Handling login request from 136.62.92.204:63455
+2024/12/03 04:53:29 handlers.go:123: Received login request for email: test@example.com
+2024/12/03 04:53:29 handlers.go:137: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=n0CqHCLW6xJcyEImRmjC5r_FB67PM1FbSvWkZEXKXAA&tenantId=public#tO4VKcEy4nv2ABww1_VHhWJ9rmFbc0x4UFbvVv4E7oc
+2024/12/03 04:53:29 handlers.go:95: Completed request: POST /auth/login
+2024/12/03 04:53:51 handlers.go:93: Incoming request: GET /auth/verify from 136.62.92.204:63552
+2024/12/03 04:53:51 handlers.go:95: Completed request: GET /auth/verify
+2024/12/03 04:53:51 handlers.go:93: Incoming request: POST /auth/verify-code from 136.62.92.204:63552
+2024/12/03 04:53:51 handlers.go:198: Handling verify-code request from 136.62.92.204:63552
+2024/12/03 04:53:51 handlers.go:211: Verifying code for session: n0CqHCLW6xJcyEImRmjC5r_FB67PM1FbSvWkZEXKXAA
+2024/12/03 04:53:51 handlers.go:226: Error consuming code: SuperTokens core threw an error for a request to path: '/n0cqhclw6xjcyeimrmjc5r_fb67pm1fbsvwkzexkxaa/recipe/signinup/code/consume' with status code: 404 and message: Not found
+2024/12/03 04:53:51 handlers.go:95: Completed request: POST /auth/verify-code
+2024/12/03 04:56:38 handlers.go:33: Starting SuperTokens initialization...
+2024/12/03 04:56:38 handlers.go:64: SuperTokens initialized successfully
+2024/12/03 04:56:38 main.go:20: Starting server on port 8080
+2024/12/03 04:56:45 handlers.go:93: Incoming request: POST /auth/login from 136.62.92.204:64305
+2024/12/03 04:56:45 handlers.go:112: Handling login request from 136.62.92.204:64305
+2024/12/03 04:56:45 handlers.go:123: Received login request for email: test@example.com
+2024/12/03 04:56:45 handlers.go:137: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=LTmEdZQpej7xCgyU4Cm5axp4a-Z4LjmzSOWYzEnZSXw&tenantId=public#-SdMJ4EzZ7_DjY0jIa8g9rXqPnXLHv27Cf33uLYBLtM
+2024/12/03 04:56:45 handlers.go:95: Completed request: POST /auth/login
+2024/12/03 04:56:59 handlers.go:93: Incoming request: GET /auth/verify from 136.62.92.204:64360
+2024/12/03 04:56:59 handlers.go:95: Completed request: GET /auth/verify
+2024/12/03 04:56:59 handlers.go:93: Incoming request: POST /auth/verify-code from 136.62.92.204:64360
+2024/12/03 04:56:59 handlers.go:208: Handling verify-code request from 136.62.92.204:64360
+2024/12/03 04:56:59 handlers.go:221: Attempting to verify code with preAuthSessionId: LTmEdZQpej7xCgyU4Cm5axp4a-Z4LjmzSOWYzEnZSXw and linkCode: -SdMJ4EzZ7_DjY0jIa8g9rXqPnXLHv27Cf33uLYBLtM
+2024/12/03 04:56:59 handlers.go:236: Error consuming code: SuperTokens core threw an error for a request to path: '/ltmedzqpej7xcgyu4cm5axp4a-z4ljmzsowyzenzsxw/recipe/signinup/code/consume' with status code: 400 and message: AppId or tenantId not found => Tenant with the following connectionURIDomain, appId and tenantId combination not found: (, public, ltmedzqpej7xcgyu4cm5axp4a-z4ljmzsowyzenzsxw)
+2024/12/03 04:56:59 handlers.go:95: Completed request: POST /auth/verify-code
+2024/12/03 05:00:32 handlers.go:35: Starting SuperTokens initialization...
+2024/12/03 05:00:32 handlers.go:66: SuperTokens initialized successfully
+2024/12/03 05:00:32 main.go:20: Starting server on port 8080
+2024/12/03 05:07:11 handlers.go:33: Starting SuperTokens initialization...
+2024/12/03 05:07:11 handlers.go:65: SuperTokens initialized successfully
+2024/12/03 05:07:11 main.go:20: Starting server on port 8080
+2024/12/03 05:07:18 handlers.go:93: Incoming request: POST /auth/login from 136.62.92.204:50562
+2024/12/03 05:07:18 handlers.go:112: Handling login request from 136.62.92.204:50562
+2024/12/03 05:07:18 handlers.go:123: Received login request for email: test@example.com
+2024/12/03 05:07:18 handlers.go:129: Error creating magic link: no SuperTokens core available to query
+2024/12/03 05:07:18 handlers.go:95: Completed request: POST /auth/login
+2024/12/03 05:10:05 handlers.go:33: Starting SuperTokens initialization...
+2024/12/03 05:10:05 handlers.go:65: SuperTokens initialized successfully
+2024/12/03 05:10:05 main.go:20: Starting server on port 8080
+2024/12/03 05:13:17 handlers.go:33: Starting SuperTokens initialization...
+2024/12/03 05:13:17 handlers.go:65: SuperTokens initialized successfully
+2024/12/03 05:13:17 main.go:20: Starting server on port 8080
+2024/12/03 05:13:55 handlers.go:94: Incoming request: POST /auth/login from 136.62.92.204:52202
+2024/12/03 05:13:55 handlers.go:113: Handling login request from 136.62.92.204:52202
+2024/12/03 05:13:55 handlers.go:124: Received login request for email: test@example.com
+2024/12/03 05:13:55 handlers.go:138: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=6lYx53QYdQbrZ2Nl_-zzwjME4pAGg8dwe8WTtHCXLQU&tenantId=public#z8wzMnDAF2Ubf0GfZsk5qSbtMMFC78PRscD6XpjOCQU
+2024/12/03 05:13:55 handlers.go:96: Completed request: POST /auth/login
+2024/12/03 05:14:09 handlers.go:94: Incoming request: GET /auth/verify from 136.62.92.204:52260
+2024/12/03 05:14:09 handlers.go:96: Completed request: GET /auth/verify
+2024/12/03 05:14:09 handlers.go:94: Incoming request: POST /auth/verify-code from 136.62.92.204:52260
+2024/12/03 05:14:09 handlers.go:209: Handling verify-code request from 136.62.92.204:52260
+2024/12/03 05:14:09 handlers.go:222: Attempting to verify code with preAuthSessionId: 6lYx53QYdQbrZ2Nl_-zzwjME4pAGg8dwe8WTtHCXLQU and linkCode: z8wzMnDAF2Ubf0GfZsk5qSbtMMFC78PRscD6XpjOCQU
+2024/12/03 05:14:09 handlers.go:237: Error consuming code: SuperTokens core threw an error for a request to path: '/6lyx53qydqbrz2nl_-zzwjme4pagg8dwe8wtthcxlqu/recipe/signinup/code/consume' with status code: 404 and message: Not found
+2024/12/03 05:14:09 handlers.go:96: Completed request: POST /auth/verify-code
+2024/12/03 05:18:55 handlers.go:35: Starting SuperTokens initialization...
+2024/12/03 05:18:55 handlers.go:76: SuperTokens initialized successfully
+2024/12/03 05:18:55 main.go:20: Starting server on port 8080
+2024/12/03 05:19:13 handlers.go:105: Incoming request: POST /auth/login from 136.62.92.204:53528
+2024/12/03 05:19:13 handlers.go:124: Handling login request from 136.62.92.204:53528
+2024/12/03 05:19:13 handlers.go:135: Received login request for email: test@example.com
+2024/12/03 05:19:13 handlers.go:149: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=ZB9x_X_0SKxlD1cv1bMuMAZ9kHqlTk8ISM_v4NavDfY&tenantId=public#V5irwCcnh8MGXxqEiZxvhdJaMTQPAbb5h3t4DwJCKIc
+2024/12/03 05:19:13 handlers.go:107: Completed request: POST /auth/login
+2024/12/03 05:19:26 handlers.go:105: Incoming request: GET /auth/verify from 136.62.92.204:53589
+2024/12/03 05:19:26 handlers.go:107: Completed request: GET /auth/verify
+2024/12/03 05:19:26 handlers.go:105: Incoming request: POST /auth/verify-code from 136.62.92.204:53589
+2024/12/03 05:19:26 handlers.go:220: Handling verify-code request from 136.62.92.204:53589
+2024/12/03 05:19:26 handlers.go:233: Attempting to verify code with preAuthSessionId: ZB9x_X_0SKxlD1cv1bMuMAZ9kHqlTk8ISM_v4NavDfY and linkCode: V5irwCcnh8MGXxqEiZxvhdJaMTQPAbb5h3t4DwJCKIc
+2024/12/03 05:19:26 handlers.go:248: Error consuming code: SuperTokens core threw an error for a request to path: '/zb9x_x_0skxld1cv1bmumaz9khqltk8ism_v4navdfy/recipe/signinup/code/consume' with status code: 404 and message: Not found
+2024/12/03 05:19:26 handlers.go:107: Completed request: POST /auth/verify-code
+2024/12/03 05:21:32 handlers.go:35: Starting SuperTokens initialization...
+2024/12/03 05:21:32 handlers.go:76: SuperTokens initialized successfully
+2024/12/03 05:21:32 main.go:20: Starting server on port 8080
+2024/12/03 05:21:35 handlers.go:105: Incoming request: POST /auth/login from 136.62.92.204:54131
+2024/12/03 05:21:35 handlers.go:124: Handling login request from 136.62.92.204:54131
+2024/12/03 05:21:35 handlers.go:135: Received login request for email: test@example.com
+2024/12/03 05:21:35 handlers.go:149: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=DC2CA9G9LEZ8-RPSNgJ2bMwekDBB-Ay-n46Qo4ECtBQ&tenantId=public#wMBy9OxbGSG8vONo0_-CBKgIrOyqqMTyLE_x7mth5i0
+2024/12/03 05:21:35 handlers.go:107: Completed request: POST /auth/login
+2024/12/03 05:21:45 handlers.go:105: Incoming request: GET /auth/verify from 136.62.92.204:54176
+2024/12/03 05:21:45 handlers.go:107: Completed request: GET /auth/verify
+2024/12/03 05:21:45 handlers.go:105: Incoming request: POST /auth/verify-code from 136.62.92.204:54176
+2024/12/03 05:21:45 handlers.go:222: Handling verify-code request from 136.62.92.204:54176
+2024/12/03 05:21:45 handlers.go:236: Attempting to verify code with preAuthSessionId: DC2CA9G9LEZ8-RPSNgJ2bMwekDBB-Ay-n46Qo4ECtBQ, linkCode: wMBy9OxbGSG8vONo0_-CBKgIrOyqqMTyLE_x7mth5i0, tenantId: public
+2024/12/03 05:21:45 handlers.go:252: Error consuming code: SuperTokens core threw an error for a request to path: '/dc2ca9g9lez8-rpsngj2bmwekdbb-ay-n46qo4ectbq/recipe/signinup/code/consume' with status code: 400 and message: AppId or tenantId not found => Tenant with the following connectionURIDomain, appId and tenantId combination not found: (, public, dc2ca9g9lez8-rpsngj2bmwekdbb-ay-n46qo4ectbq)
+2024/12/03 05:21:45 handlers.go:107: Completed request: POST /auth/verify-code
+2024/12/03 05:22:11 handlers.go:105: Incoming request: GET /auth/verify from 136.62.92.204:54176
+2024/12/03 05:22:11 handlers.go:107: Completed request: GET /auth/verify
+2024/12/03 05:22:11 handlers.go:105: Incoming request: POST /auth/verify-code from 136.62.92.204:54176
+2024/12/03 05:22:11 handlers.go:222: Handling verify-code request from 136.62.92.204:54176
+2024/12/03 05:22:11 handlers.go:236: Attempting to verify code with preAuthSessionId: DC2CA9G9LEZ8-RPSNgJ2bMwekDBB-Ay-n46Qo4ECtBQ, linkCode: wMBy9OxbGSG8vONo0_-CBKgIrOyqqMTyLE_x7mth5i0, tenantId: public
+2024/12/03 05:22:11 handlers.go:252: Error consuming code: SuperTokens core threw an error for a request to path: '/dc2ca9g9lez8-rpsngj2bmwekdbb-ay-n46qo4ectbq/recipe/signinup/code/consume' with status code: 400 and message: AppId or tenantId not found => Tenant with the following connectionURIDomain, appId and tenantId combination not found: (, public, dc2ca9g9lez8-rpsngj2bmwekdbb-ay-n46qo4ectbq)
+2024/12/03 05:22:11 handlers.go:107: Completed request: POST /auth/verify-code
+2024/12/03 05:25:28 handlers.go:34: Starting SuperTokens initialization...
+2024/12/03 05:25:28 handlers.go:70: SuperTokens initialized successfully
+2024/12/03 05:25:28 main.go:20: Starting server on port 8080
+2024/12/03 05:25:41 handlers.go:99: Incoming request: POST /auth/login from 136.62.92.204:55152
+2024/12/03 05:25:41 handlers.go:118: Handling login request from 136.62.92.204:55152
+2024/12/03 05:25:41 handlers.go:129: Received login request for email: test@example.com
+2024/12/03 05:25:41 handlers.go:143: Successfully created magic link for test@example.com: http://3.131.82.143:8080/auth/verify?preAuthSessionId=S7yQTv-saAnUApKvxxdPafzqR6fP6M8RqjcmetB9128&tenantId=public#AWjz_D24dKsK0rpImBeOzra_AngoHetyMEmlWnp3OhQ
+2024/12/03 05:25:41 handlers.go:101: Completed request: POST /auth/login
+2024/12/03 05:25:50 handlers.go:99: Incoming request: GET /auth/verify from 136.62.92.204:55197
+2024/12/03 05:25:50 handlers.go:101: Completed request: GET /auth/verify
+2024/12/03 05:25:50 handlers.go:99: Incoming request: POST /auth/verify-code from 136.62.92.204:55197
+2024/12/03 05:25:50 handlers.go:216: Handling verify-code request from 136.62.92.204:55197
+2024/12/03 05:25:50 handlers.go:230: Attempting to verify code with preAuthSessionId: S7yQTv-saAnUApKvxxdPafzqR6fP6M8RqjcmetB9128, linkCode: AWjz_D24dKsK0rpImBeOzra_AngoHetyMEmlWnp3OhQ, tenantId: public
+2024/12/03 05:25:50 handlers.go:246: Error consuming code: SuperTokens core threw an error for a request to path: '/s7yqtv-saanuapkvxxdpafzqr6fp6m8rqjcmetb9128/recipe/signinup/code/consume' with status code: 400 and message: AppId or tenantId not found => Tenant with the following connectionURIDomain, appId and tenantId combination not found: (, public, s7yqtv-saanuapkvxxdpafzqr6fp6m8rqjcmetb9128)
+2024/12/03 05:25:50 handlers.go:101: Completed request: POST /auth/verify-code
+2024/12/03 05:28:44 handlers.go:34: Starting SuperTokens initialization...
+2024/12/03 05:28:44 handlers.go:70: SuperTokens initialized successfully
+2024/12/03 05:28:44 main.go:20: Starting server on port 8080
+2024/12/03 05:28:50 handlers.go:99: Incoming request: POST /auth/login from 136.62.92.204:55952
+2024/12/03 05:28:50 handlers.go:118: Handling login request from 136.62.92.204:55952
+2024/12/03 05:28:50 handlers.go:129: Received login request for email: test@example.com
+2024/12/03 05:28:50 handlers.go:135: Error creating magic link: no SuperTokens core available to query
+2024/12/03 05:28:50 handlers.go:101: Completed request: POST /auth/login
