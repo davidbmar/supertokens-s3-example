@@ -14,3 +14,5 @@ transcription-service/
 ├── config/
 │   └── config.go         # Configuration
 └── go.mod               # Dependencies file
+
+#added \r or \n instead of \r\n so fixed.
