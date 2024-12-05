@@ -3,7 +3,6 @@ module transcription-service
 go 1.22.2
 
 require (
-	github.com/aws/aws-sdk-go v1.55.5
 	github.com/gorilla/mux v1.8.1
 	github.com/joho/godotenv v1.5.1
 	github.com/supertokens/supertokens-golang v0.25.1
@@ -16,7 +15,6 @@ require (
 	github.com/golang/mock v1.6.0 // indirect
 	github.com/golang/protobuf v1.3.2 // indirect
 	github.com/h2non/parth v0.0.0-20190131123155-b4df798d6542 // indirect
-	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/nyaruka/phonenumbers v1.0.73 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

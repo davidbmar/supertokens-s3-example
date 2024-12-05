@@ -129,15 +129,28 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
 
     log.Printf("Received login request for email: %s", input.Email)
 
-    // Simulate generation of preAuthSessionId and linkCode (replace with actual logic)
-    preAuthSessionId := "generatedPreAuthSessionId"
-    linkCode := "generatedLinkCode"
+    // Call SuperTokens API to generate the code
+    result, err := passwordless.CreateCodeWithEmail("public", input.Email, nil)
+    if err != nil {
+        log.Printf("Error generating magic link: %v", err)
+        http.Error(w, "Failed to generate magic link", http.StatusInternalServerError)
+        return
+    }
 
-    // Construct magic link
+    if result.OK == nil {
+        log.Printf("Error: No valid code returned by SuperTokens")
+        http.Error(w, "Failed to generate magic link", http.StatusInternalServerError)
+        return
+    }
+
+    preAuthSessionID := result.OK.PreAuthSessionID
+    linkCode := result.OK.LinkCode
+
+    // Construct the magic link
     host := r.Host
     magicLink := fmt.Sprintf(
         "http://%s/auth/verify?preAuthSessionId=%s&tenantId=public&linkCode=%s",
-        host, preAuthSessionId, linkCode,
+        host, preAuthSessionID, linkCode,
     )
 
     log.Printf("Generated magic link: %s", magicLink)
@@ -145,76 +158,40 @@ func handleLogin(w http.ResponseWriter, r *http.Request) {
     // Respond with the magic link
     w.Header().Set("Content-Type", "application/json")
     json.NewEncoder(w).Encode(map[string]string{
-        "status":  "success",
-        "link":    magicLink,
-        "message": "Magic link generated successfully",
+        "status":    "success",
+        "link":      magicLink,
+        "message":   "Magic link generated successfully",
+        "tenantId":  "public",
+        "sessionId": preAuthSessionID,
     })
 }
 
-
 func handleVerify(w http.ResponseWriter, r *http.Request) {
-    w.Header().Set("Content-Type", "text/html")
-    w.Write([]byte(`
-    <html>
-        <head>
-            <title>Verify Login</title>
-        </head>
-        <body>
-            <h1>Verifying login...</h1>
-            <div id="status"></div>
-        </body>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const linkCode = window.location.hash.substring(1);
-                const preAuthSessionId = new URLSearchParams(window.location.search).get('preAuthSessionId');
-                
-                console.log("PreAuthSessionId:", preAuthSessionId);
-                console.log("LinkCode:", linkCode);
-                
-                if (!preAuthSessionId || !linkCode) {
-                    document.getElementById('status').innerHTML = '<h1>Error: Missing required parameters</h1>';
-                    return;
-                }
+    preAuthSessionId := r.URL.Query().Get("preAuthSessionId")
+    linkCode := r.URL.Query().Get("linkCode")
 
-                console.log("Making verification request...");
-                fetch('/auth/verify-code', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        preAuthSessionId: preAuthSessionId,
-                        linkCode: linkCode,
-                        tenantId: "public"
-                    })
-                })
-                .then(response => {
-                    console.log("Response status:", response.status);
-                    return response.text().then(text => {
-                        try {
-                            return JSON.parse(text);
-                        } catch (e) {
-                            throw new Error('Server response: ' + text);
-                        }
-                    });
-                })
-                .then(data => {
-                    console.log("Verification response:", data);
-                    if (data.status === 'success') {
-                        document.getElementById('status').innerHTML = '<h1>Successfully logged in!</h1><p>User ID: ' + data.userId + '</p>';
-                    } else {
-                        document.getElementById('status').innerHTML = '<h1>Error: ' + (data.message || 'Unknown error') + '</h1>';
-                    }
-                })
-                .catch(error => {
-                    console.error('Verification error:', error);
-                    document.getElementById('status').innerHTML = '<h1>Error verifying link</h1><p>' + error.message + '</p>';
-                });
-            });
-        </script>
-    </html>
-    `))
+    if preAuthSessionId == "" || linkCode == "" {
+        http.Error(w, "Missing required parameters", http.StatusBadRequest)
+        return
+    }
+
+    // Call SuperTokens API to consume the code
+    resp, err := passwordless.ConsumeCodeWithLinkCode(preAuthSessionId, linkCode, "public", nil)
+    if err != nil {
+        log.Printf("Error consuming code: %v", err)
+        http.Error(w, "Invalid or expired link", http.StatusBadRequest)
+        return
+    }
+
+    // Respond with success
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(map[string]string{
+        "status":  "success",
+        "message": "Login successful",
+        "userId":  resp.OK.User.ID,
+    })
 }
+
 
 func handleVerifyCode(w http.ResponseWriter, r *http.Request) {
     log.Printf("Handling verify-code request from %s", r.RemoteAddr)
@@ -231,20 +208,15 @@ func handleVerifyCode(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    // Call SuperTokens to consume the code
-    resp, err := passwordless.ConsumeCodeWithLinkCode(
-        preAuthSessionId,
-        linkCode,
-        "public", // Fixed tenant ID
-        nil,
-    )
+    // Call SuperTokens API to verify the code
+    resp, err := passwordless.ConsumeCodeWithLinkCode(preAuthSessionId, linkCode, "public", nil)
     if err != nil {
         log.Printf("Error consuming code: %v", err)
-        http.Error(w, err.Error(), http.StatusBadRequest)
+        http.Error(w, "Invalid or expired code", http.StatusBadRequest)
         return
     }
 
-    log.Printf("Code verified successfully, creating session for user: %s", resp.OK.User.ID)
+    log.Printf("Code verified successfully for user: %s", resp.OK.User.ID)
 
     // Create a new session
     sessionInfo, err := session.CreateNewSession(
@@ -257,7 +229,7 @@ func handleVerifyCode(w http.ResponseWriter, r *http.Request) {
     )
     if err != nil {
         log.Printf("Error creating session: %v", err)
-        http.Error(w, err.Error(), http.StatusInternalServerError)
+        http.Error(w, "Failed to create session", http.StatusInternalServerError)
         return
     }
 
@@ -271,4 +243,5 @@ func handleVerifyCode(w http.ResponseWriter, r *http.Request) {
         "userId":  sessionInfo.GetUserID(),
     })
 }
+
 
