@@ -1,68 +1,88 @@
 #!/bin/bash
 set -e  # Exit on error
 
-SUPERTOKENS_BASE_URL="http://127.0.0.1:8080"
-PUBLIC_IP="3.131.82.143"
+SUPERTOKENS_CORE_URL="http://127.0.0.1:3567"
+GO_SERVICE_URL="http://127.0.0.1:8080"
 
+# Detect if running on EC2 or Mac
+if [ "$(uname)" == "Darwin" ]; then
+    echo "Running test script on Mac. Using EC2 IP address."
+    SUPERTOKENS_CORE_URL="http://<YOUR_EC2_IP>:3567" # Replace <YOUR_EC2_IP> with your EC2's public IP.
+    GO_SERVICE_URL="http://<YOUR_EC2_IP>:8080"       # Replace <YOUR_EC2_IP> with your EC2's public IP.
+else
+    if grep -q "ec2" /sys/hypervisor/uuid 2>/dev/null ||
+       [ -d /sys/devices/virtual/dmi/id ] && grep -q "amazon" /sys/devices/virtual/dmi/id/sys_vendor; then
+        echo "Running test script on EC2, assuming localhost."
+    else
+        echo "Could not determine environment. Assuming EC2 and using localhost."
+    fi
+fi
+
+echo "Using SuperTokens Core URL: $SUPERTOKENS_CORE_URL"
+echo "Using Go Service URL: $GO_SERVICE_URL"
 echo "Testing SuperTokens setup..."
 
-# Check if SuperTokens is running
-echo "Checking if SuperTokens is running..."
-HELLO_ENDPOINT="$SUPERTOKENS_BASE_URL/hello"
-echo "Sending request to: $HELLO_ENDPOINT"
-if curl -s "$HELLO_ENDPOINT" > /dev/null; then
-    echo "SuperTokens /hello endpoint is working."
+# Check if SuperTokens Core is running
+echo "Checking if SuperTokens Core is running..."
+HELLO_RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}" "$SUPERTOKENS_CORE_URL/hello")
+HELLO_HTTP_CODE=$(echo "$HELLO_RESPONSE" | grep HTTP_CODE | cut -d':' -f2)
+HELLO_BODY=$(echo "$HELLO_RESPONSE" | sed '/HTTP_CODE/d')
+
+if [ "$HELLO_HTTP_CODE" -eq 200 ]; then
+    echo "SuperTokens Core /hello endpoint is working."
 else
-    echo "Error: SuperTokens /hello endpoint is not reachable."
+    echo "Error: SuperTokens Core /hello endpoint returned HTTP $HELLO_HTTP_CODE"
+    echo "Response Body: $HELLO_BODY"
+    docker logs supertokens-core | tail -n 50
     exit 1
 fi
 
-# Check tenant listing API
+# Check if Go service is running
+echo "Checking if Go service is running..."
+if ! curl -s -o /dev/null "$GO_SERVICE_URL/hello"; then
+    echo "Error: Go service is not reachable at $GO_SERVICE_URL."
+    echo "Please ensure the Go service is running and try again."
+    exit 1
+fi
+
+# Check tenant listing API (SuperTokens Core)
 echo "Checking tenant listing API..."
-TENANT_LIST_ENDPOINT="$SUPERTOKENS_BASE_URL/recipe/tenant/list"
-TENANT_LIST_CURL="curl -s -o /dev/null -w \"%{http_code}\" -X GET \"$TENANT_LIST_ENDPOINT\" -H \"Content-Type: application/json\" -H \"api-key: supertokens-long-api-key-123456789\""
-echo "Sending request to: $TENANT_LIST_ENDPOINT"
-TENANT_RESPONSE=$(eval $TENANT_LIST_CURL)
+TENANT_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET "$SUPERTOKENS_CORE_URL/recipe/tenant/list" \
+    -H "Content-Type: application/json" \
+    -H "api-key: supertokens-long-api-key-123456789")
 if [ "$TENANT_RESPONSE" -eq 404 ]; then
     echo "Tenant listing API responded with 404 (expected if multitenancy is not configured)."
 else
     echo "Tenant listing API returned HTTP $TENANT_RESPONSE"
+    docker logs supertokens-core | tail -n 50
+    exit 1
 fi
 
-# Test login API
-echo "Testing login API..."
-LOGIN_ENDPOINT="$SUPERTOKENS_BASE_URL/auth/login"
+# Test login API (Go Service)
+echo "Testing login API via Go service..."
 LOGIN_PAYLOAD='{"email": "testuser@example.com"}'
-echo "Sending request to: $LOGIN_ENDPOINT"
-echo "Payload: $LOGIN_PAYLOAD"
-LOGIN_RESPONSE_BODY=$(curl -s -X POST "$LOGIN_ENDPOINT" \
-    -H "Content-Type: application/json" \
-    -d "$LOGIN_PAYLOAD")
-LOGIN_RESPONSE_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST "$LOGIN_ENDPOINT" \
-    -H "Content-Type: application/json" \
-    -d "$LOGIN_PAYLOAD")
 
-if [ "$LOGIN_RESPONSE_CODE" -eq 200 ]; then
+LOGIN_RESPONSE=$(curl -s -w "\nHTTP_CODE:%{http_code}" -X POST "$GO_SERVICE_URL/auth/login" \
+    -H "Content-Type: application/json" \
+    -d "$LOGIN_PAYLOAD")
+LOGIN_HTTP_CODE=$(echo "$LOGIN_RESPONSE" | grep HTTP_CODE | cut -d':' -f2)
+LOGIN_BODY=$(echo "$LOGIN_RESPONSE" | sed '/HTTP_CODE/d')
+
+if [ "$LOGIN_HTTP_CODE" -eq 200 ]; then
     echo "Login API responded successfully:"
-    echo "$LOGIN_RESPONSE_BODY"
-
-    # Extract and prepare the magic link for testing
-    MAGIC_LINK=$(echo "$LOGIN_RESPONSE_BODY" | grep -o '"link":"[^"]*' | sed 's/"link":"//')
-    FIXED_MAGIC_LINK=$(echo "$MAGIC_LINK" | sed "s/127.0.0.1/$PUBLIC_IP/" | sed "s/\\\u0026/\&/g")
-
-    echo -e "\nNext Step:"
-    echo "  1. Copy the following URL and paste it into your browser to test verification:"
-    echo "     $FIXED_MAGIC_LINK"
-    echo "  2. Ensure the IP address has been updated to $PUBLIC_IP."
-    echo "  3. Replace '\\u0026' with '&' in the query string parameters if necessary."
+    echo "$LOGIN_BODY"
 else
-    echo "Error: Login API returned HTTP $LOGIN_RESPONSE_CODE"
-    echo "Response Body: $LOGIN_RESPONSE_BODY"
+    echo "Error: Login API returned HTTP $LOGIN_HTTP_CODE"
+    echo "Response Body: $LOGIN_BODY"
     echo "Debugging information:"
-    echo "  Endpoint: $LOGIN_ENDPOINT"
+    echo "  Endpoint: $GO_SERVICE_URL/auth/login"
     echo "  Payload: $LOGIN_PAYLOAD"
-    echo "  Expected HTTP 200, but got $LOGIN_RESPONSE_CODE"
-    echo "  Response Body: $LOGIN_RESPONSE_BODY"
+    echo "  Expected HTTP 200, but got $LOGIN_HTTP_CODE"
+    echo "  Response Body: $LOGIN_BODY"
+
+    # Print Go Service container logs for debugging
+    echo "Go Service logs:"
+    docker logs $(docker ps --filter "name=transcription-service" -q) | tail -n 50
     exit 1
 fi
 
