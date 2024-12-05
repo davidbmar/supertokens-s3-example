@@ -1,13 +1,25 @@
 #!/bin/bash
-#
-#
-#
-echo "sudo usermod -aG docker $USER" 
-echo "Before running this script be sure to do the above!"
-read -p "Press any key to resume ..."
-
-#!/bin/bash
 set -e  # Exit on error
+
+# Load environment variables from .env file
+if [ -f .env ]; then
+    echo "Loading environment variables from .env file..."
+    set -a  # Automatically export all variables
+    source .env
+    set +a  # Stop exporting variables
+else
+    echo ".env file not found. Ensure the file exists and contains necessary variables."
+    exit 1
+fi
+
+# Verify user is in Docker group
+if ! groups | grep -q "\bdocker\b"; then
+    echo "You are not in the Docker group. Run 'sudo usermod -aG docker $USER' and re-login."
+    exit 1
+fi
+
+POSTGRES_PASSWORD="${POSTGRES_PASSWORD:-your-strong-password}"
+API_KEYS="${API_KEYS:-supertokens-long-api-key-123456789}"
 
 echo "Setting up SuperTokens and PostgreSQL containers..."
 
@@ -32,7 +44,7 @@ docker run -d \
     --health-timeout=3s \
     --health-retries=5 \
     -e POSTGRES_USER=supertokens \
-    -e POSTGRES_PASSWORD=your-strong-password \
+    -e POSTGRES_PASSWORD="${POSTGRES_PASSWORD}" \
     -e POSTGRES_DB=supertokens \
     postgres:latest
 
@@ -64,8 +76,8 @@ docker run -d \
     --name supertokens-core \
     --network supertokens \
     -p 3567:3567 \
-    -e POSTGRESQL_CONNECTION_URI="postgresql://supertokens:your-strong-password@supertokens-postgres:5432/supertokens" \
-    -e API_KEYS="supertokens-long-api-key-123456789" \
+    -e POSTGRESQL_CONNECTION_URI="postgresql://supertokens:${POSTGRES_PASSWORD}@supertokens-postgres:5432/supertokens" \
+    -e API_KEYS="${API_KEYS}" \
     -e SUPERTOKENS_APP_NAME="Transcription Service" \
     registry.supertokens.io/supertokens/supertokens-postgresql
 
@@ -96,3 +108,4 @@ echo -e "\nRunning containers:"
 docker ps
 
 echo -e "\nSetup complete!"
+

@@ -2,6 +2,7 @@ package api
 
 import (
     "encoding/json"
+    "fmt"
     "io"
     "log"
     "net/http"
@@ -116,34 +117,37 @@ func handleHome(w http.ResponseWriter, r *http.Request) {
 
 func handleLogin(w http.ResponseWriter, r *http.Request) {
     log.Printf("Handling login request from %s", r.RemoteAddr)
-    
+
     var input struct {
         Email string `json:"email"`
     }
-    
     if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-        log.Printf("Error decoding request body: %v", err)
+        log.Printf("Error decoding login request: %v", err)
         http.Error(w, "Invalid request body", http.StatusBadRequest)
         return
     }
+
     log.Printf("Received login request for email: %s", input.Email)
 
-    w.Header().Set("Content-Type", "application/json")
-    
-    link, err := passwordless.CreateMagicLinkByEmail("public", input.Email)
-    if err != nil {
-        log.Printf("Error creating magic link: %v", err)
-        json.NewEncoder(w).Encode(map[string]string{
-            "status": "error",
-            "error":  err.Error(),
-        })
-        return
-    }
+    // Simulate generation of preAuthSessionId and linkCode (replace with actual logic)
+    preAuthSessionId := "generatedPreAuthSessionId"
+    linkCode := "generatedLinkCode"
 
-    log.Printf("Successfully created magic link for %s: %s", input.Email, link)
+    // Construct magic link
+    host := r.Host
+    magicLink := fmt.Sprintf(
+        "http://%s/auth/verify?preAuthSessionId=%s&tenantId=public&linkCode=%s",
+        host, preAuthSessionId, linkCode,
+    )
+
+    log.Printf("Generated magic link: %s", magicLink)
+
+    // Respond with the magic link
+    w.Header().Set("Content-Type", "application/json")
     json.NewEncoder(w).Encode(map[string]string{
-        "status": "success",
-        "link":   link,
+        "status":  "success",
+        "link":    magicLink,
+        "message": "Magic link generated successfully",
     })
 }
 
@@ -211,32 +215,27 @@ func handleVerify(w http.ResponseWriter, r *http.Request) {
     </html>
     `))
 }
+
 func handleVerifyCode(w http.ResponseWriter, r *http.Request) {
     log.Printf("Handling verify-code request from %s", r.RemoteAddr)
-    
-    var input struct {
-        PreAuthSessionId string `json:"preAuthSessionId"`
-        LinkCode        string `json:"linkCode"`
-    }
 
-    if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-        log.Printf("Error decoding verify request body: %v", err)
-        http.Error(w, err.Error(), http.StatusBadRequest)
-        return
-    }
+    // Extract parameters from query string
+    preAuthSessionId := r.URL.Query().Get("preAuthSessionId")
+    linkCode := r.URL.Query().Get("linkCode")
 
-    log.Printf("Attempting to verify code with preAuthSessionId: %s and linkCode: %s", input.PreAuthSessionId, input.LinkCode)
+    log.Printf("Attempting to verify code with preAuthSessionId: %s and linkCode: %s", preAuthSessionId, linkCode)
 
-    if input.PreAuthSessionId == "" || input.LinkCode == "" {
+    if preAuthSessionId == "" || linkCode == "" {
         log.Printf("Missing required parameters")
         http.Error(w, "Missing preAuthSessionId or linkCode", http.StatusBadRequest)
         return
     }
 
+    // Call SuperTokens to consume the code
     resp, err := passwordless.ConsumeCodeWithLinkCode(
-        input.PreAuthSessionId,
-        input.LinkCode,
-        "public",  // Fixed tenant ID
+        preAuthSessionId,
+        linkCode,
+        "public", // Fixed tenant ID
         nil,
     )
     if err != nil {
@@ -247,10 +246,11 @@ func handleVerifyCode(w http.ResponseWriter, r *http.Request) {
 
     log.Printf("Code verified successfully, creating session for user: %s", resp.OK.User.ID)
 
+    // Create a new session
     sessionInfo, err := session.CreateNewSession(
         r,
         w,
-        "public",  // Fixed tenant ID
+        "public", // Fixed tenant ID
         resp.OK.User.ID,
         nil,
         nil,
@@ -263,6 +263,7 @@ func handleVerifyCode(w http.ResponseWriter, r *http.Request) {
 
     log.Printf("Session created successfully for user: %s", sessionInfo.GetUserID())
 
+    // Respond with success
     w.Header().Set("Content-Type", "application/json")
     json.NewEncoder(w).Encode(map[string]string{
         "status":  "success",
