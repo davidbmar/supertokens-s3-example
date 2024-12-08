@@ -44,7 +44,7 @@ func InitSuperTokens() error {
             APIKey:        "supertokens-long-api-key-123456789",
         },
         AppInfo: supertokens.AppInfo{
-            AppName:         "Transcription Service",
+            AppName:         "TranscriptionService",
             APIDomain:       apiDomain,
             WebsiteDomain:   apiDomain,
             APIBasePath:     &apiBasePath,
