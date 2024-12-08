@@ -41,7 +41,7 @@ fi
 echo "Checking if Go service is running..."
 if ! curl -s -o /dev/null "$GO_SERVICE_URL/hello"; then
     echo "Error: Go service is not reachable at $GO_SERVICE_URL."
-    echo "Please ensure the Go service is running and try again."
+    echo "Please ensure the Go service is running and try again. (go run cmd/server/main.go)"
     exit 1
 fi
 
