@@ -73,11 +73,11 @@ transcription-service/
 │   └── server/
 │       └── main.go         # Backend entry point
 ├── internal/
-│   ├── auth/              # Authentication logic
+│   ├── auth/              # this is not here yet, but eventually we would build this out to make it more modular.
 │   │   └── auth.go
 │   ├── api/               # HTTP handlers
 │   │   └── handlers.go
-│   ├── storage/           # S3 operations (optional)
+│   ├── storage/           # S3 operations this is not here yet but eventually we would build more out.
 │   │   └── storage.go
 ├── config/
 │   └── config.go          # Configuration management
